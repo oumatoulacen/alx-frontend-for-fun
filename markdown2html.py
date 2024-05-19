@@ -12,3 +12,12 @@ if __name__ == '__main__':
     if not os.path.exists(sys.argv[1]):
         print('Missing {}'.format(sys.argv[1]), file=sys.stderr)
         exit(1)
+    
+    with open(sys.argv[1], 'r') as f:
+        lines = f.readlines()
+
+    with open(sys.argv[2], 'w') as f:
+        for line in lines:
+            if line[0] == '#':
+                h = line.count('#', 0, 6)
+                f.write('<h{}>{}</h{}>\n'.format(h, line[h+1:].strip(), h))
