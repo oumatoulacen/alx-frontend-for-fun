@@ -19,10 +19,12 @@ if __name__ == '__main__':
 
     with open(sys.argv[2], 'w') as f:
         unordered_list_open = False
+        ordered_list_open = False
         for line_num in range(len(lines)):
             if lines[line_num].startswith('#'):
                 h = lines[line_num].count('#', 0, 6)
                 f.write('<h{}>{}</h{}>\n'.format(h, lines[line_num][h+1:].strip(), h))
+            
             elif lines[line_num].startswith('-'):
                 if not unordered_list_open:
                     f.write('<ul>\n')
@@ -33,4 +35,16 @@ if __name__ == '__main__':
                     unordered_list_open = False
                 elif (line_num != len(lines) - 1) and not lines[line_num + 1].startswith('-'):
                     f.write('</ul>\n')
+                    unordered_list_open = False
+
+            elif lines[line_num].startswith('*'):
+                if not unordered_list_open:
+                    f.write('<ol>\n')
+                    unordered_list_open = True
+                f.write('<li>{}</li>\n'.format(lines[line_num][2:].strip()))
+                if ((line_num == len(lines) - 1) and unordered_list_open):
+                    f.write('</ol>\n')
+                    unordered_list_open = False
+                elif (line_num != len(lines) - 1) and not lines[line_num + 1].startswith('*'):
+                    f.write('</ol>\n')
                     unordered_list_open = False
