@@ -51,7 +51,7 @@ if __name__ == '__main__':
                     unordered_list_open = False
                 
             else:
-                if not p_open:
+                if not p_open and len(lines[line_num].strip()):
                     f.write('<p>\n')
                     p_open = True
                 if len(lines[line_num].strip()):
@@ -64,6 +64,8 @@ if __name__ == '__main__':
                         if lines[line_num + 1][0] in ['-', '*', '#']:
                             f.write('</p>\n')
                             p_open = False
+                        else:
+                            f.write('<br/>\n')
                     else:
                         f.write('</p>\n')
                         p_open = False
