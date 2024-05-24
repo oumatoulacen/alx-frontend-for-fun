@@ -50,7 +50,7 @@ if __name__ == '__main__':
                     unordered_list_open = False
                 
             else:
-                if lines[line_num].strip() != '':
-                    f.write('<p>{}</p>\n'.format(lines[line_num].strip()))
-                else:
+                if lines[line_num].strip() == '':
                     f.write('<br/>\n')
+                else:
+                    f.write('<p>{}</p>\n'.format(lines[line_num].strip()))
