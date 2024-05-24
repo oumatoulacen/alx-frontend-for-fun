@@ -3,6 +3,7 @@
 
 import sys
 import os
+import hashlib
 
 if __name__ == '__main__':
     if len(sys.argv) < 3:
@@ -41,6 +42,19 @@ if __name__ == '__main__':
                     else:
                         lines[line_num] = lines[line_num].replace('__', '<em>', 1)
                         b_open = True
+            if '[[' and ']]' in lines[line_num]:
+                start = lines[line_num].find('[[')
+                end = lines[line_num].find(']]')
+                text = lines[line_num][start + 2:end].strip()
+                md5 = hashlib.md5(text.encode()).hexdigest()
+                lines[line_num] = lines[line_num].replace('[[' + text + ']]', md5)
+
+            if '((' and '))' in lines[line_num]:
+                start = lines[line_num].find('((')
+                end = lines[line_num].find('))')
+                text = lines[line_num][start + 2:end].strip()
+                text_without_c = text.replace('c', '').replace('C', '')
+                lines[line_num] = lines[line_num].replace('((' + text + '))', text_without_c)
 
             if lines[line_num].startswith('#'):
                 h = lines[line_num].count('#', 0, 6)
