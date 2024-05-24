@@ -20,6 +20,7 @@ if __name__ == '__main__':
     with open(sys.argv[2], 'w') as f:
         unordered_list_open = False
         ordered_list_open = False
+        p_open = False
         for line_num in range(len(lines)):
             if lines[line_num].startswith('#'):
                 h = lines[line_num].count('#', 0, 6)
@@ -50,7 +51,20 @@ if __name__ == '__main__':
                     unordered_list_open = False
                 
             else:
-                if lines[line_num].strip() == '':
-                    f.write('<br/>\n')
-                else:
-                    f.write('<p>{}</p>\n'.format(lines[line_num].strip()))
+                if not p_open:
+                    f.write('<p>\n')
+                    p_open = True
+                if len(lines[line_num].strip()):
+                    f.write('{}\n'.format(lines[line_num].strip()))
+                if ((line_num == len(lines) - 1) and p_open):
+                    f.write('</p>\n')
+                    p_open = False
+                elif (line_num != len(lines) - 1) and p_open:
+                    if len(lines[line_num + 1].strip()):
+                        if lines[line_num + 1][0] in ['-', '*', '#']:
+                            f.write('</p>\n')
+                            p_open = False
+                    else:
+                        f.write('</p>\n')
+                        p_open = False
+                
