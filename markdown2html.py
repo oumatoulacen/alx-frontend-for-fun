@@ -52,3 +52,5 @@ if __name__ == '__main__':
             else:
                 if lines[line_num].strip() != '':
                     f.write('<p>{}</p>\n'.format(lines[line_num].strip()))
+                else:
+                    f.write('<br/>\n')
