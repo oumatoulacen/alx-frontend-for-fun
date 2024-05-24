@@ -18,17 +18,19 @@ if __name__ == '__main__':
         lines = f.readlines()
 
     with open(sys.argv[2], 'w') as f:
-        unordered_list = []
-        for line in lines:
-            if line[0] == '#':
-                h = line.count('#', 0, 6)
-                f.write('<h{}>{}</h{}>\n'.format(h, line[h+1:].strip(), h))
-            elif line[0] == '-':
-                unordered_list.append(line[2:].strip())
-
-        if unordered_list:
-            f.write('<ul>\n')
-            for item in unordered_list:
-                f.write('<li>{}</li>\n'.format(item))
-            f.write('</ul>\n')
-            unordered_list = []
+        unordered_list_open = False
+        for line_num in range(len(lines)):
+            if lines[line_num].startswith('#'):
+                h = lines[line_num].count('#', 0, 6)
+                f.write('<h{}>{}</h{}>\n'.format(h, lines[line_num][h+1:].strip(), h))
+            elif lines[line_num].startswith('-'):
+                if not unordered_list_open:
+                    f.write('<ul>\n')
+                    unordered_list_open = True
+                f.write('<li>{}</li>\n'.format(lines[line_num][2:].strip()))
+                if ((line_num == len(lines) - 1) and unordered_list_open):
+                    f.write('</ul>\n')
+                    unordered_list_open = False
+                elif (line_num != len(lines) - 1) and not lines[line_num + 1].startswith('-'):
+                    f.write('</ul>\n')
+                    unordered_list_open = False
