@@ -48,3 +48,7 @@ if __name__ == '__main__':
                 elif (line_num != len(lines) - 1) and not lines[line_num + 1].startswith('*'):
                     f.write('</ol>\n')
                     unordered_list_open = False
+                
+            else:
+                if lines[line_num].strip() != '':
+                    f.write('<p>{}</p>\n'.format(lines[line_num].strip()))
